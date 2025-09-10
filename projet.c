@@ -16,12 +16,13 @@ struct joueurs {
     int age[MAX_joueurs];
     int buts[MAX_joueurs];
     int nJoueurs;
-    //int nextID;
+    
+    
 };
-//+++++++++++++++++++++++++++les foncations+++++++++++++++++++++++++++
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//==================================================les fonctions=================================
+
 //+++++++++++++++++++++++++++ foncation d'ajouter+++++++++++++++++++++++++++
-
-
 // fonction dajouter poste (gardien, défenseur, milieu, attaquant).
 void choisirPoste(char poste[]){
     int choix;
@@ -32,6 +33,7 @@ void choisirPoste(char poste[]){
         printf("2- défenseur.\n");
         printf("3- milieu.\n");
         printf("4- attaquant.\n");
+
         printf("Enter le choix.\n");
         scanf("%d", &choix);
         if(choix==1){
@@ -101,21 +103,133 @@ struct joueurs ajouterJoueurs(struct joueurs J, int ajoute){
     return J;
     
 }
-//+++++++++++++++++++++++++++ foncation d'afficher+++++++++++++++++++++++++++++
-//struct joueurs afficherJoueurs(struct joueurs J){
+//+++++++++++++++++++++++++++ foncation Afficher la liste de tous les joueurs+++++++++++++++++++++++++++++
+//les fonction de tri afficher 
+//tri par ordre alphabétique (Nom).
+void triNom(struct joueurs J){
+    for(int i=0; i<J.nJoueurs-1;i++){
+        int min_alph=i;
+        for(int j=i+1; j<J.nJoueurs; j++){
+            if(strcmp(J.nom[i], J.nom[min_alph])<0){
+                min_alph=j;
+            }
+        }
+        char tempNom[taille], tempPrenom[taille], tempPoste[taille];
+        int tempMaillot, tempAge, tempButs, tempId;
+        //change les info
+        strcpy(tempNom, J.nom[i]);
+        strcpy(J.nom[i], J.nom[min_alph]);
+        strcpy(J.nom[min_alph], tempNom);
 
-//}
+        strcpy(tempPrenom, J.prenom[i]);
+        strcpy(J.prenom[i], J.prenom[min_alph]);
+        strcpy(J.prenom[min_alph], tempPrenom);
+
+        tempMaillot=J.numeroMaillot[i];
+        J.numeroMaillot[i]=J.numeroMaillot[min_alph];
+        J.numeroMaillot[min_alph]=tempMaillot;
+
+        strcpy(tempPoste, J.poste[i]);
+        strcpy(J.poste[i], J.poste[min_alph]);
+        strcpy(J.poste[min_alph], tempPoste);
+
+        tempAge=J.age[i];
+        J.age[i]=J.age[min_alph];
+        J.age[min_alph]=tempAge;
+
+        tempButs=J.buts[i];
+        J.buts[i]=J.buts[min_alph];
+        J.buts[min_alph]=tempButs;
+
+        tempId=J.id[i];
+        J.id[i]=J.id[min_alph];
+        J.id[min_alph]=tempId;
+    }
+}
+//tri par age.
+void triAge(struct joueurs J){
+    for(int i=0;i<J.nJoueurs; i++){
+        int min_age=i;
+        for(int j=i+1; j<J.nJoueurs; j++){
+            if(J.age[j]<J.age[min_age]){
+                min_age=j;
+            }
+        }
+        char tempNom[taille], tempPrenom[taille], tempPoste[taille];
+        int tempMaillot, tempAge, tempButs, tempId;
+        strcpy(tempNom, J.nom[i]);
+        strcpy(J.nom[i], J.nom[min_age]);
+        strcpy(J.nom[min_age], tempNom);
+
+        strcpy(tempPrenom, J.prenom[i]);
+        strcpy(J.prenom[i], J.prenom[min_age]);
+        strcpy(J.prenom[min_age], tempPrenom);
+
+        tempMaillot=J.numeroMaillot[i];
+        J.numeroMaillot[i]=J.numeroMaillot[min_age];
+        J.numeroMaillot[min_age]=tempMaillot;
+
+        strcpy(tempPoste, J.poste[i]);
+        strcpy(J.poste[i], J.poste[min_age]);
+        strcpy(J.poste[min_age], tempPoste);
+
+        tempAge=J.age[i];
+        J.age[i]=J.age[min_age];
+        J.age[min_age]=tempAge;
+
+        tempButs=J.buts[i];
+        J.buts[i]=J.buts[min_age];
+        J.buts[min_age]=tempButs;
+
+        tempId=J.id[i];
+        J.id[i]=J.id[min_age];
+        J.id[min_age]=tempId;
+
+    }
+}
+// Afficher les joueurs par poste.
+// l'affichage des joueurs
+void afficherJoueurs(struct joueurs J) {
+    for(int i = 0; i < J.nJoueurs; i++) {
+        printf("%d: %s %s, Maillot: %d, Poste: %s, Age: %d, Buts: %d, ID: %d\n",
+            i + 1,
+            J.nom[i],
+            J.prenom[i],
+            J.numeroMaillot[i],
+            J.poste[i],
+            J.age[i],
+            J.buts[i],
+            J.id[i]);
+    }
+}
 
 
-
+//+++++++++++++++++++++++++++ foncation Modifier un joueur  joueurs+++++++++++++++++++++++++++++
+//Modifier le poste d’un joueur.
+struct joueurs modifierPoste(struct joueurs J, int idCherche){
+    int trouve=0;
+    for(int i=0; i<J.nJoueurs; i++){
+        if(J.id[i]==idCherche){
+            printf("ancien information : %s %s %d %s %d %d %d\n",J.nom[i], J.prenom[i], J.numeroMaillot[i], J.poste[i], J.age[i], J.buts[i], J.id[i]);
+            printf("=====modifier la poste======\n");
+            choisirPoste(J.poste[i]);
+            printf("le nouveau poste est: %s\n", J.poste[i]);
+            trouve=1;
+            break;
+        }
+    }
+    if(trouve==0){
+        printf("joueur non trouve.\n");
+    }
+    return J;
+}
 
 
 int main(){
     struct joueurs Joueurs;
     struct joueurs J;
     Joueurs.nJoueurs = 0;
-    //Joueurs.nextID=1001;
-    int choix, choixAjoute;
+    int choix, choixAjoute, choixAffiche, choixModifier;
     srand(time(NULL));
 
     do{
@@ -132,9 +246,9 @@ int main(){
         printf("++++++++++++++++++++choix++++++++++++++++++++\n");
         printf("Enter le choix : ");
         scanf("%d", &choix);
-        //switch des case de menu principal
+        //===========================================switch des case de menu principal=========================================
         switch(choix){
-            //1er cas pour ajouter des joueurs
+            //_____________________Ajouter les joueur Menu Principal________________________ 
             case 1:
             do{
                 printf("++++++++++++++++++++Menu ajouter les joueur++++++++++++++++++++\n");
@@ -145,6 +259,7 @@ int main(){
                 printf("Enter le choix d'ajouter : ");
                 scanf("%d", &choixAjoute);
                 switch(choixAjoute){
+                    //1er cas pour ajouter un seul joueur
                     case 1:{
                     int ajoute=1;
                     printf("++++++++++++++++++++Ajouter un seul joueur++++++++++++++++++++\n");
@@ -152,6 +267,7 @@ int main(){
                     break;
                     }
 
+                    //2eme cas pour ajouter pleusieur joueurs
                     case 2:{
                     printf("++++++++++++++++++++Ajouter pleusieur joueurs++++++++++++++++++++\n");
                     int ajoute=2;
@@ -170,13 +286,102 @@ int main(){
             }while(choixAjoute!=0);
             break;
 
+             
+            //__________________________Afficher la liste de tous les joueurs_______________________________
             case 2:
-            //1er cas pour affichers des joueurs
+            //1er cas pour affichers joueurs par tri
+            do{
+                printf("++++++++++++++++++++Menu Afficher la liste de tous les joueurs++++++++++++++++++++\n");
+                printf("1- Afficher la liste de tous les joueurs par ordre alphabétique (Nom): \n");
+                printf("2- Afficher la liste de tous les joueurs par âge: \n");
+                printf("3- Afficher les joueurs par poste: \n");
+                printf("0- Retour : \n");
+
+                printf("Enter le choix d'affichage : ");
+                scanf("%d", &choixAffiche);
+
+                switch(choixAffiche){
+                    //case 1 pour tri par nom
+                    case 1:{
+                    printf("++++++++++++++++++++la liste de tous les joueurs par ordre alphabétique++++++++++++++++++++\n");
+                    triNom(Joueurs);
+                    afficherJoueurs(Joueurs);
+                    break;}
+                    //case 2 pour tri par age
+                    case 2:
+                    printf("++++++++++++++++++++la liste de tous les joueurs par âge++++++++++++++++++++\n");
+                    triAge(Joueurs);
+                    break;
+                    //case 3 pour tri par age
+                    case 3:
+                    printf("++++++++++++++++++++la liste de tous les joueurs par poste++++++++++++++++++++\n");
+
+                    break;
+
+                    case 0:
+                    printf("Retour au menu principal\n");
+                    break;
+
+                    default:
+                    printf("Choix invalide!\n");
+
+                }
+            }while(choixAffiche!=0);
+            break;
+
+
+            //_____________________Modifier les joueur Menu Principal________________________ 
+            case 3:
+            do{
+                printf("++++++++++++++++++++Menu modifier++++++++++++++++++++\n");
+                printf("1- Modifier le poste d’un joueur: \n");
+                printf("2- Modifier l’âge d’un joueur: \n");
+                printf("3- Modifier le nombre de buts marqués par un joueur: \n");
+                printf("0- Retour : \n");
+
+                printf("Enter le choix modifier : ");
+                scanf("%d", &choixModifier);
+
+                switch(choixModifier){
+                    //case 1 Modifier le poste
+                    
+                    case 1:{
+                    int idCherche;
+                    printf("+++++++++++++ la modifier le poste d’un joueur++++++++++++\n");
+                    printf("saisir l'id de joueur modifier: ");
+                    scanf("%d", &idCherche);
+                    Joueurs=modifierPoste(Joueurs, idCherche);
+                    break;
+                    }
+
+                    //case 2 Modifier l’âge
+                    case 2:{
+                    printf("+++++++++++++la modifier l’âge d’un joueur++++++++++++\n");
+                    break;
+                    }
+
+                    //case 3 nombre de buts
+                    case 3:
+                    printf("+++++++++++++la modifier le nombre de buts marqués par un joueur++++++++++++\n");
+                    break;
+
+                    //Retour
+                    case 0:
+                    printf("+++++++++++++Retour au menu principal++++++++++++++++++++\n");
+                    break;
+
+                    default:
+                    printf("Choix invalide!\n");
+                }
+
+
+            }while(choixModifier!=0);
             break;
 
             default:
             printf("Choix invalide!\n");   
         }
+        
     }while(choix!=0);
 
 }

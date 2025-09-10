@@ -15,9 +15,7 @@ struct joueurs {
     char poste[MAX_joueurs][taille];
     int age[MAX_joueurs];
     int buts[MAX_joueurs];
-    int nJoueurs;
-    
-    
+    int nJoueurs; 
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //==================================================les fonctions=================================
@@ -37,23 +35,21 @@ void choisirPoste(char poste[]){
         printf("Enter le choix.\n");
         scanf("%d", &choix);
         if(choix==1){
-            strcpy(poste, "Gardien\n"); 
+            strcpy(poste, "Gardien"); 
             valid = 1;
         }else if(choix==2){
-            strcpy(poste, "défenseur\n"); 
+            strcpy(poste, "défenseur"); 
             valid = 1;
         }else if(choix==3){
-            strcpy(poste, "milieu\n"); 
+            strcpy(poste, "milieu"); 
             valid = 1;
         }else if(choix==4){
-            strcpy(poste, "attaquant\n"); 
+            strcpy(poste, "attaquant"); 
             valid = 1;
         }else{
             printf("choix non valid.\n");
         }
     }
-    
-
 }
 struct joueurs ajouterJoueurs(struct joueurs J, int ajoute){
     if(J.nJoueurs+ajoute>MAX_joueurs){
@@ -106,11 +102,11 @@ struct joueurs ajouterJoueurs(struct joueurs J, int ajoute){
 //+++++++++++++++++++++++++++ foncation Afficher la liste de tous les joueurs+++++++++++++++++++++++++++++
 //les fonction de tri afficher 
 //tri par ordre alphabétique (Nom).
-void triNom(struct joueurs J){
+struct joueurs triNom(struct joueurs J){
     for(int i=0; i<J.nJoueurs-1;i++){
         int min_alph=i;
         for(int j=i+1; j<J.nJoueurs; j++){
-            if(strcmp(J.nom[i], J.nom[min_alph])<0){
+            if(strcmp(J.nom[j], J.nom[min_alph])<0){
                 min_alph=j;
             }
         }
@@ -145,10 +141,11 @@ void triNom(struct joueurs J){
         J.id[i]=J.id[min_alph];
         J.id[min_alph]=tempId;
     }
+    return J;
 }
 //tri par age.
-void triAge(struct joueurs J){
-    for(int i=0;i<J.nJoueurs; i++){
+struct joueurs triAge(struct joueurs J){
+    for(int i=0;i<J.nJoueurs-1; i++){
         int min_age=i;
         for(int j=i+1; j<J.nJoueurs; j++){
             if(J.age[j]<J.age[min_age]){
@@ -186,6 +183,7 @@ void triAge(struct joueurs J){
         J.id[min_age]=tempId;
 
     }
+    return J;
 }
 // Afficher les joueurs par poste.
 // l'affichage des joueurs
@@ -227,7 +225,7 @@ struct joueurs modifierPoste(struct joueurs J, int idCherche){
 
 int main(){
     struct joueurs Joueurs;
-    struct joueurs J;
+    //struct joueurs J;
     Joueurs.nJoueurs = 0;
     int choix, choixAjoute, choixAffiche, choixModifier;
     srand(time(NULL));
@@ -304,13 +302,14 @@ int main(){
                     //case 1 pour tri par nom
                     case 1:{
                     printf("++++++++++++++++++++la liste de tous les joueurs par ordre alphabétique++++++++++++++++++++\n");
-                    triNom(Joueurs);
+                    Joueurs = triNom(Joueurs);
                     afficherJoueurs(Joueurs);
                     break;}
                     //case 2 pour tri par age
                     case 2:
                     printf("++++++++++++++++++++la liste de tous les joueurs par âge++++++++++++++++++++\n");
-                    triAge(Joueurs);
+                    Joueurs = triAge(Joueurs);
+                    afficherJoueurs(Joueurs);
                     break;
                     //case 3 pour tri par age
                     case 3:
@@ -383,5 +382,7 @@ int main(){
         }
         
     }while(choix!=0);
+
+    return 0;
 
 }

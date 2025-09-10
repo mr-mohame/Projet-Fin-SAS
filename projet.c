@@ -1,6 +1,8 @@
 #include<stdio.h> 
 #include <string.h> 
 #include <stdbool.h> 
+#include<stdlib.h> // pour le rand
+#include <time.h>
 // +++++++++++++++++++++++++++define les joueurs+++++++++++++++++++++++++++ 
 #define MAX_joueurs 100
 #define taille 50
@@ -14,50 +16,95 @@ struct joueurs {
     int age[MAX_joueurs];
     int buts[MAX_joueurs];
     int nJoueurs;
-    int nextID;
-    
+    //int nextID;
 };
 //+++++++++++++++++++++++++++les foncations+++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++ foncation d'ajouter+++++++++++++++++++++++++++
+
+
+// fonction dajouter poste (gardien, défenseur, milieu, attaquant).
+void choisirPoste(char poste[]){
+    int choix;
+    int valid=0;
+    while(valid==0){
+        printf("choisir le poste de joueur: \n");
+        printf("1- gardien.\n");
+        printf("2- défenseur.\n");
+        printf("3- milieu.\n");
+        printf("4- attaquant.\n");
+        printf("Enter le choix.\n");
+        scanf("%d", &choix);
+        if(choix==1){
+            strcpy(poste, "Gardien\n"); 
+            valid = 1;
+        }else if(choix==2){
+            strcpy(poste, "défenseur\n"); 
+            valid = 1;
+        }else if(choix==3){
+            strcpy(poste, "milieu\n"); 
+            valid = 1;
+        }else if(choix==4){
+            strcpy(poste, "attaquant\n"); 
+            valid = 1;
+        }else{
+            printf("choix non valid.\n");
+        }
+    }
+    
+
+}
 struct joueurs ajouterJoueurs(struct joueurs J, int ajoute){
     if(J.nJoueurs+ajoute>MAX_joueurs){
         printf("la liste est plein.\n");
         return J;
     }
+    //int numDebut = J.nJoueurs + 1;
     for(int j=0; j<ajoute; j++){
         int i=J.nJoueurs;
-        printf("======joueur %d:======\n", j+1);
-        printf("ajouter le nom de %d joueur: ",j+1);
+        printf("======joueur %d:======\n", i + 1);
+        printf("ajouter le nom de joueur : ");
         scanf("%s", J.nom[i]);
 
-        printf("ajouter le prenom de %d joueur: ",j+1);
+        printf("ajouter le prenom de joueur : ");
         scanf("%s", J.prenom[i]);
 
-        printf("ajouter le numero de maillot de %d joueur: ",j+1);
+        printf("ajouter le numero de maillot de joueur : ");
         scanf("%d", &J.numeroMaillot[i]);
 
-        printf("ajouter le poste de %d joueur: ",j+1);
-        scanf("%s", J.poste[i]);
-
-        printf("ajouter l'age de %d joueur: ",j+1);
+        choisirPoste(J.poste[i]);
+        printf("le poste de joueur : %s", J.poste[i]);
+        
+        printf("ajouter l'age de joueur : ");
         scanf("%d", &J.age[i]);
 
-        printf("ajouter le buts de joueur: ");
+        printf("ajouter le buts de joueur : ");
         scanf("%d", &J.buts[i]);
 
-        J.id[J.nJoueurs]=J.nextID;
-        printf("l'id de %d joueur est : %d\n", j+1, J.id[J.nJoueurs]);
-        J.nJoueurs++;
-        J.nextID++;
-        
+        int id;
+        int existe=0;
+        do{
+            id=(rand()%9000)+1000;
+            existe=0;
+                //verifier l'id
+            for(int d=0; d<J.nJoueurs; d++){
+                if(J.id[d]==id){
+                    existe=1;
+                    break;
+                }
+            }
+        }while(existe); // recommencer ranr que l'id existe deja
+        J.id[i]=id;
+        printf("l'id de joueur : %d\n", J.id[i]);
+       // J.nextID++;
+        J.nJoueurs++;  
     }
     return J;
     
 }
 //+++++++++++++++++++++++++++ foncation d'afficher+++++++++++++++++++++++++++++
-struct joueurs ajouterJoueurs(struct joueurs J){
+//struct joueurs afficherJoueurs(struct joueurs J){
 
-}
+//}
 
 
 
@@ -67,9 +114,9 @@ int main(){
     struct joueurs Joueurs;
     struct joueurs J;
     Joueurs.nJoueurs = 0;
-    Joueurs.nextID = 1001;
+    //Joueurs.nextID=1001;
     int choix, choixAjoute;
-    ;
+    srand(time(NULL));
 
     do{
         //le menu de choix
